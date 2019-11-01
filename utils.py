@@ -52,9 +52,8 @@ def cut_text_zh(text):
     return jieba.lcut(text)
 
 
-def pos_text(text, lang='eng'):
-    text = text.strip()
-    return nltk.pos_tag(text, lang=lang)
+def pos_text(words, lang='eng'):
+    return nltk.pos_tag(words, lang=lang)
 
 
 def pos_text_zh(text):
