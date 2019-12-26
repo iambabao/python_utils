@@ -1,3 +1,4 @@
+import os
 import json
 import numpy as np
 import math
@@ -9,6 +10,44 @@ import tensorflow as tf
 from jieba import posseg as pseg
 from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+def makedirs(dir):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+
+def read_dict(dict_file):
+    with open(dict_file, 'r', encoding='utf-8') as fin:
+        key_2_id = json.load(fin)
+        id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
+
+    return key_2_id, id_2_key
+
+
+def read_json(json_file):
+    with open(json_file, 'r', encoding='utf-8') as fin:
+        return json.load(fin)
+
+
+def save_json(json_data, json_file):
+    with open(json_file, 'w', encoding='utf-8') as fout:
+        json.dump(json_data, fout, ensure_ascii=False, indent=4)
+
+
+def read_json_lines(json_file):
+    data = []
+    with open(json_file, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            data.append(json.loads(line))
+
+    return data
+
+
+def save_json_lines(json_data, json_file):
+    with open(json_file, 'w', encoding='utf-8') as fout:
+        for line in json_data:
+            print(json.dumps(line, ensure_ascii=False), file=fout)
 
 
 def pad_list(item_list, pad, max_len):
@@ -32,14 +71,6 @@ def convert_list(item_list, convert_dict, pad, unk, max_len=None):
         item_list = pad_list(item_list, pad, max_len)
 
     return item_list
-
-
-def read_dict(dict_file):
-    with open(dict_file, 'r', encoding='utf-8') as fin:
-        key_2_id = json.load(fin)
-        id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
-
-    return key_2_id, id_2_key
 
 
 def cut_text(text, language='english'):
