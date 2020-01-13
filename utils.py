@@ -17,6 +17,18 @@ def makedirs(dir):
         os.makedirs(dir)
 
 
+def read_file(filename):
+    with open(filename, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            yield line
+
+
+def write_file(data, filename):
+    with open(filename, 'w', encoding='utf-8') as fout:
+        for line in data:
+            print(line, file=fout)
+
+
 def read_dict(dict_file):
     with open(dict_file, 'r', encoding='utf-8') as fin:
         key_2_id = json.load(fin)
@@ -92,14 +104,15 @@ def pos_text_zh(text):
     return pseg.lcut(text)
 
 
-def make_batch_iter(data, batch_size, shuffle):
+def make_batch_iter(data, batch_size, shuffle, verbose=True):
     data_size = len(data)
 
     if shuffle:
         random.shuffle(data)
 
     num_batches = (data_size + batch_size - 1) // batch_size
-    print('total batches: {}'.format(num_batches))
+    if verbose:
+        print('total batches: {}'.format(num_batches))
     for i in range(num_batches):
         start_index = i * batch_size
         end_index = min(data_size, (i + 1) * batch_size)
@@ -195,6 +208,10 @@ def view_tf_check_point(ckpt_dir_or_file):
 
     for v in init_vars:
         print(v)
+
+
+def print_title(title, sep='=', file=None):
+    print(sep * 20 + '  {}  '.format(title) + sep * 20, file=file)
 
 
 # ====================
