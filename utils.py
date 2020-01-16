@@ -12,6 +12,10 @@ from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
+def print_title(title, sep='=', file=None):
+    print(sep * 20 + '  {}  '.format(title) + sep * 20, file=file)
+
+
 def makedirs(dir):
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -29,37 +33,45 @@ def write_file(data, filename):
             print(line, file=fout)
 
 
-def read_dict(dict_file):
-    with open(dict_file, 'r', encoding='utf-8') as fin:
-        key_2_id = json.load(fin)
-        id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
+def read_json(filename):
+    with open(filename, 'r', encoding='utf-8') as fin:
+        return json.load(fin)
+
+
+def save_json(data, filename):
+    with open(filename, 'w', encoding='utf-8') as fout:
+        json.dump(data, fout, ensure_ascii=False, indent=4)
+
+
+def read_json_lines(filename):
+    with open(filename, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            yield json.loads(line)
+
+
+def save_json_lines(data, filename):
+    with open(filename, 'w', encoding='utf-8') as fout:
+        for line in data:
+            print(json.dumps(line, ensure_ascii=False), file=fout)
+
+
+def read_txt_dict(filename):
+    key_2_id = dict()
+    with open(filename, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            _key, _id = line.strip().split()
+            key_2_id[_key] = _id
+    id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
 
 
-def read_json(json_file):
-    with open(json_file, 'r', encoding='utf-8') as fin:
-        return json.load(fin)
+def read_json_dict(filename):
+    with open(filename, 'r', encoding='utf-8') as fin:
+        key_2_id = json.load(fin)
+        id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
-
-def save_json(json_data, json_file):
-    with open(json_file, 'w', encoding='utf-8') as fout:
-        json.dump(json_data, fout, ensure_ascii=False, indent=4)
-
-
-def read_json_lines(json_file):
-    data = []
-    with open(json_file, 'r', encoding='utf-8') as fin:
-        for line in fin:
-            data.append(json.loads(line))
-
-    return data
-
-
-def save_json_lines(json_data, json_file):
-    with open(json_file, 'w', encoding='utf-8') as fout:
-        for line in json_data:
-            print(json.dumps(line, ensure_ascii=False), file=fout)
+    return key_2_id, id_2_key
 
 
 def pad_list(item_list, pad, max_len):
@@ -208,10 +220,6 @@ def view_tf_check_point(ckpt_dir_or_file):
 
     for v in init_vars:
         print(v)
-
-
-def print_title(title, sep='=', file=None):
-    print(sep * 20 + '  {}  '.format(title) + sep * 20, file=file)
 
 
 # ====================
