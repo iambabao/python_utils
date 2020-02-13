@@ -66,6 +66,12 @@ def read_txt_dict(filename):
     return key_2_id, id_2_key
 
 
+def save_txt_dict(key_2_id, filename):
+    with open(filename, 'w', encoding='utf-8') as fout:
+        for key, value in key_2_id.items():
+            print(key, value, file=fout)
+
+
 def read_json_dict(filename):
     with open(filename, 'r', encoding='utf-8') as fin:
         key_2_id = json.load(fin)
@@ -118,11 +124,10 @@ def pos_text_zh(text):
 
 def make_batch_iter(data, batch_size, shuffle, verbose=True):
     data_size = len(data)
+    num_batches = (data_size + batch_size - 1) // batch_size
 
     if shuffle:
         random.shuffle(data)
-
-    num_batches = (data_size + batch_size - 1) // batch_size
     if verbose:
         print('total batches: {}'.format(num_batches))
     for i in range(num_batches):

@@ -3,26 +3,24 @@ from nltk.translate.bleu_score import corpus_bleu, SmoothingFunction
 
 
 class Evaluator:
-    def __init__(self):
-        pass
+    def __init__(self, key):
+        self.key = key
 
-    @staticmethod
-    def get_bleu_score(truth_file, pred_file, to_lower):
+    def get_bleu_score(self, truth_file, pred_file, to_lower):
         f_truth = open(truth_file, 'r', encoding='utf-8')
         f_pred = open(pred_file, 'r', encoding='utf-8')
 
         list_of_references = []
         hypotheses = []
         for truth in f_truth:
-            pred = f_pred.readline()
-
             truth = json.loads(truth)
-            truth = truth['target']
+            truth = truth[self.key]
             if to_lower:
                 truth = list(map(str.lower, truth))
 
+            pred = f_pred.readline()
             pred = json.loads(pred)
-            pred = pred['target']
+            pred = pred[self.key]
             if to_lower:
                 pred = list(map(str.lower, pred))
 

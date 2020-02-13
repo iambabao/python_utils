@@ -4,10 +4,8 @@ from utils import convert_list
 
 
 class DataReader:
-    def __init__(self, config, src_2_id, tgt_2_id):
+    def __init__(self, config):
         self.config = config
-        self.src_2_id = src_2_id
-        self.tgt_2_id = tgt_2_id
 
     def _read_data(self, data_file):
         src_seq = []
@@ -22,14 +20,13 @@ class DataReader:
 
                 if self.config.to_lower:
                     src = list(map(str.lower, src))
-                src = [self.config.sos] + src[:self.config.sequence_len-2] + [self.config.eos]
-
-                if self.config.to_lower:
                     tgt = list(map(str.lower, tgt))
+
+                src = src[:self.config.sequence_len]
                 tgt = [self.config.sos] + tgt[:self.config.sequence_len-2] + [self.config.eos]
 
-                src_seq.append(convert_list(src, self.src_2_id, self.config.pad_id, self.config.unk_id))
-                tgt_seq.append(convert_list(tgt, self.tgt_2_id, self.config.pad_id, self.config.unk_id))
+                src_seq.append(convert_list(src, self.config.src_2_id, self.config.pad_id, self.config.unk_id))
+                tgt_seq.append(convert_list(tgt, self.config.tgt_2_id, self.config.pad_id, self.config.unk_id))
 
                 counter += 1
                 if counter % 10000 == 0:

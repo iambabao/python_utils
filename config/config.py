@@ -3,14 +3,14 @@ import os
 
 class Config:
     def __init__(self, root_dir, current_model, num_epoch=30, batch_size=32,
-                 sequence_len=128, sentence_len=128, document_len=16,
-                 top_k=5, threshold=0.4, tfidf_size=5000, embedding_size=200,
-                 hidden_size=256, att_size=256,
+                 top_k=5, threshold=0.4, sequence_len=128,
+                 tfidf_size=5000, word_em_size=200,
+                 hidden_size=256, attention_size=256,
                  kernel_size=(2, 3, 4, 5), filter_dim=64,
                  num_layer=4, num_head=8, model_dim=256,
                  fc_size_s=128, fc_size_m=512, fc_size_l=1024,
                  optimizer='Adam', lr=0.001, dropout=0.1, l2_rate=0.0,
-                 embedding_trainable=False):
+                 embedding_trainable=False, beam_search=False):
         self.root_dir = root_dir
 
         self.temp_dir = os.path.join(self.root_dir, 'temp')
@@ -67,14 +67,13 @@ class Config:
         self.top_k = top_k
         self.threshold = threshold
         self.tfidf_size = tfidf_size
-        self.embedding_size = embedding_size
+        self.word_em_size = word_em_size
         self.sequence_len = sequence_len
-        self.sentence_len = sentence_len
-        self.document_len = document_len
+        self.beam_search = beam_search
 
         # RNN
         self.hidden_size = hidden_size
-        self.att_size = att_size
+        self.attention_size = attention_size
 
         # CNN
         self.kernel_size = kernel_size
