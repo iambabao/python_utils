@@ -164,12 +164,13 @@ def load_glove_embedding(data_file, word_list):
     with open(data_file, 'r', encoding='utf-8') as fin:
         line = fin.readline()
         embedding_size = len(line.strip().split()) - 1
-        while line is not None:
+        while line:
             line = line.strip().split()
-            word = line[0]
-            vector = [float(val) for val in line[1:]]
-            if word in word_list:
-                w2v[word] = vector
+            if len(line) == embedding_size + 1:
+                word = line[0]
+                vector = [float(val) for val in line[1:]]
+                if word in word_list:
+                    w2v[word] = vector
             line = fin.readline()
     print('hit words: {}'.format(len(w2v)))
 
