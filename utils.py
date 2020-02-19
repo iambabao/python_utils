@@ -55,21 +55,27 @@ def save_json_lines(data, filename):
             print(json.dumps(line, ensure_ascii=False), file=fout)
 
 
-def read_txt_dict(filename):
+def read_txt_dict(filename, sep=None):
     key_2_id = dict()
     with open(filename, 'r', encoding='utf-8') as fin:
         for line in fin:
-            _key, _id = line.strip().split()
+            if sep:
+                _key, _id = line.strip().split(sep)
+            else:
+                _key, _id = line.strip().split()
             key_2_id[_key] = _id
     id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
 
 
-def save_txt_dict(key_2_id, filename):
+def save_txt_dict(key_2_id, filename, sep=None):
     with open(filename, 'w', encoding='utf-8') as fout:
         for key, value in key_2_id.items():
-            print(key, value, file=fout)
+            if sep:
+                print('{} {}'.format(key, value), file=fout)
+            else:
+                print('{}{}{}'.format(key, sep, value), file=fout)
 
 
 def read_json_dict(filename):
