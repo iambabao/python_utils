@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+"""
+@Author     : Bao
+@Date       : 2020/2/20 14:04
+@Desc       :
+"""
+
 import os
 
 
@@ -10,7 +18,7 @@ class Config:
                  num_layer=4, num_head=8, model_dim=256,
                  fc_size_s=128, fc_size_m=512, fc_size_l=1024,
                  optimizer='Adam', lr=0.001, dropout=0.1, l2_rate=0.0,
-                 embedding_trainable=False, beam_search=False):
+                 beam_search=False):
         self.root_dir = root_dir
 
         self.temp_dir = os.path.join(self.root_dir, 'temp')
@@ -96,4 +104,3 @@ class Config:
         self.dropout = dropout
         self.optimizer = optimizer
         self.l2_rate = l2_rate
-        self.embedding_trainable = embedding_trainable

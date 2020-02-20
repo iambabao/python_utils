@@ -1,11 +1,19 @@
+# -*- coding: utf-8 -*-
+
+"""
+@Author     : Bao
+@Date       : 2020/2/20 14:04
+@Desc       :
+"""
+
 import json
-from utils import read_dict
 
 
 class Evaluator:
-    def __init__(self, label_dict):
-        self.label_2_id, self.id_2_label = read_dict(label_dict)
-        self.label_num = len(self.label_2_id)
+    def __init__(self, config):
+        self.label_2_id = config.label_2_id
+        self.id_2_label = config.id_2_label
+        self.num_label = len(self.label_2_id)
 
     # Gen new results according to the truth and users output
     def gen_new_result(self, result, truth, pred):
@@ -16,7 +24,7 @@ class Evaluator:
         for v in truth['label']:
             s2.add(self.label_2_id[v])
 
-        for v in range(self.label_num):
+        for v in range(self.num_label):
             in1 = v in s1
             in2 = v in s2
             if in1:
@@ -54,7 +62,7 @@ class Evaluator:
 
     def get_result(self, truth_file, pred_file):
         result = [[]]
-        for v in range(self.label_num):
+        for v in range(self.num_label):
             result[0].append({'TP': 0, 'FP': 0, 'TN': 0, 'FN': 0})
 
         f_truth = open(truth_file, 'r', encoding='utf-8')

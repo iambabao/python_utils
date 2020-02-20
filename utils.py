@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+"""
+@Author     : Bao
+@Date       : 2020/2/20 14:04
+@Desc       :
+"""
+
 import os
 import json
 import numpy as np
@@ -27,7 +35,7 @@ def read_file(filename):
             yield line
 
 
-def write_file(data, filename):
+def save_file(data, filename):
     with open(filename, 'w', encoding='utf-8') as fout:
         for line in data:
             print(line, file=fout)
@@ -84,6 +92,11 @@ def read_json_dict(filename):
         id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
+
+
+def save_json_dict(data, filename):
+    with open(filename, 'w', encoding='utf-8') as fout:
+        json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
 def pad_list(item_list, pad, max_len):

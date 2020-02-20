@@ -1,9 +1,16 @@
-import json
+# -*- coding: utf-8 -*-
+
+"""
+@Author     : Bao
+@Date       : 2020/2/20 14:04
+@Desc       :
+"""
 
 from .pycocoevalcap.bleu.bleu import Bleu
 from .pycocoevalcap.meteor.meteor import Meteor
 from .pycocoevalcap.rouge.rouge import Rouge
 from .pycocoevalcap.cider.cider import Cider
+from utils import read_json_lines
 
 
 class Evaluator:
@@ -12,21 +19,19 @@ class Evaluator:
 
     def evaluate(self, ref_file, hyp_file, to_lower):
         refs = []
-        with open(ref_file, 'r', encoding='utf-8') as fin:
-            for line in fin:
-                ref = json.loads(line)[self.key]
-                if to_lower:
-                    ref = ref.lower()
-                refs.append(ref)
+        for line in read_json_lines(ref_file):
+            ref = line[self.key]  # ref is a sentence
+            if to_lower:
+                ref = ref.lower()
+            refs.append(ref)
         refs = {idx: [ref] for idx, ref in enumerate(refs)}
 
         hyps = []
-        with open(hyp_file, 'r', encoding='utf-8') as fin:
-            for line in fin:
-                hyp = json.loads(line)[self.key]
-                if to_lower:
-                    hyp = hyp.lower()
-                hyps.append(hyp)
+        for line in read_json_lines(hyp_file):
+            hyp = line[self.key]  # hyp is a sentence
+            if to_lower:
+                hyp = hyp.lower()
+            hyps.append(hyp)
         hyps = {idx: [hyp] for idx, hyp in enumerate(hyps)}
 
         assert len(refs) == len(hyps)
