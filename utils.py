@@ -2,7 +2,7 @@
 
 """
 @Author     : Bao
-@Date       : 2020/2/20 14:04
+@Date       : 2020/2/25 22:27
 @Desc       :
 """
 
@@ -29,43 +29,43 @@ def makedirs(dir):
         os.makedirs(dir)
 
 
-def read_file(filename):
-    with open(filename, 'r', encoding='utf-8') as fin:
+def read_file(filename, mode='r'):
+    with open(filename, mode, encoding='utf-8') as fin:
         for line in fin:
             yield line
 
 
-def save_file(data, filename):
-    with open(filename, 'w', encoding='utf-8') as fout:
+def save_file(data, filename, mode='w'):
+    with open(filename, mode, encoding='utf-8') as fout:
         for line in data:
             print(line, file=fout)
 
 
-def read_json(filename):
-    with open(filename, 'r', encoding='utf-8') as fin:
+def read_json(filename, mode='r'):
+    with open(filename, mode, encoding='utf-8') as fin:
         return json.load(fin)
 
 
-def save_json(data, filename):
-    with open(filename, 'w', encoding='utf-8') as fout:
+def save_json(data, filename, mode='w'):
+    with open(filename, mode, encoding='utf-8') as fout:
         json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
-def read_json_lines(filename):
-    with open(filename, 'r', encoding='utf-8') as fin:
+def read_json_lines(filename, mode='r'):
+    with open(filename, mode, encoding='utf-8') as fin:
         for line in fin:
             yield json.loads(line)
 
 
-def save_json_lines(data, filename):
-    with open(filename, 'w', encoding='utf-8') as fout:
+def save_json_lines(data, filename, mode='w'):
+    with open(filename, mode, encoding='utf-8') as fout:
         for line in data:
             print(json.dumps(line, ensure_ascii=False), file=fout)
 
 
-def read_txt_dict(filename, sep=None):
+def read_txt_dict(filename, sep=None, mode='r'):
     key_2_id = dict()
-    with open(filename, 'r', encoding='utf-8') as fin:
+    with open(filename, mode, encoding='utf-8') as fin:
         for line in fin:
             if sep:
                 _key, _id = line.strip().split(sep)
@@ -77,8 +77,8 @@ def read_txt_dict(filename, sep=None):
     return key_2_id, id_2_key
 
 
-def save_txt_dict(key_2_id, filename, sep=None):
-    with open(filename, 'w', encoding='utf-8') as fout:
+def save_txt_dict(key_2_id, filename, sep=None, mode='w'):
+    with open(filename, mode, encoding='utf-8') as fout:
         for key, value in key_2_id.items():
             if sep:
                 print('{} {}'.format(key, value), file=fout)
@@ -86,16 +86,16 @@ def save_txt_dict(key_2_id, filename, sep=None):
                 print('{}{}{}'.format(key, sep, value), file=fout)
 
 
-def read_json_dict(filename):
-    with open(filename, 'r', encoding='utf-8') as fin:
+def read_json_dict(filename, mode='r'):
+    with open(filename, mode, encoding='utf-8') as fin:
         key_2_id = json.load(fin)
         id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
 
 
-def save_json_dict(data, filename):
-    with open(filename, 'w', encoding='utf-8') as fout:
+def save_json_dict(data, filename, mode='w'):
+    with open(filename, mode, encoding='utf-8') as fout:
         json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
