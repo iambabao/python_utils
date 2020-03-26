@@ -2,7 +2,7 @@
 
 """
 @Author     : Bao
-@Date       : 2020/2/25 22:27
+@Date       : 2020/2/26 16:41
 @Desc       :
 """
 
@@ -29,43 +29,43 @@ def makedirs(dir):
         os.makedirs(dir)
 
 
-def read_file(filename, mode='r'):
-    with open(filename, mode, encoding='utf-8') as fin:
+def read_file(filename, mode='r', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
             yield line
 
 
-def save_file(data, filename, mode='w'):
-    with open(filename, mode, encoding='utf-8') as fout:
+def save_file(data, filename, mode='w', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fout:
         for line in data:
             print(line, file=fout)
 
 
-def read_json(filename, mode='r'):
-    with open(filename, mode, encoding='utf-8') as fin:
+def read_json(filename, mode='r', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fin:
         return json.load(fin)
 
 
-def save_json(data, filename, mode='w'):
-    with open(filename, mode, encoding='utf-8') as fout:
+def save_json(data, filename, mode='w', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fout:
         json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
-def read_json_lines(filename, mode='r'):
-    with open(filename, mode, encoding='utf-8') as fin:
+def read_json_lines(filename, mode='r', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
             yield json.loads(line)
 
 
-def save_json_lines(data, filename, mode='w'):
-    with open(filename, mode, encoding='utf-8') as fout:
+def save_json_lines(data, filename, mode='w', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fout:
         for line in data:
             print(json.dumps(line, ensure_ascii=False), file=fout)
 
 
-def read_txt_dict(filename, sep=None, mode='r'):
+def read_txt_dict(filename, sep=None, mode='r', encoding='utf-8'):
     key_2_id = dict()
-    with open(filename, mode, encoding='utf-8') as fin:
+    with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
             if sep:
                 _key, _id = line.strip().split(sep)
@@ -77,8 +77,8 @@ def read_txt_dict(filename, sep=None, mode='r'):
     return key_2_id, id_2_key
 
 
-def save_txt_dict(key_2_id, filename, sep=None, mode='w'):
-    with open(filename, mode, encoding='utf-8') as fout:
+def save_txt_dict(key_2_id, filename, sep=None, mode='w', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fout:
         for key, value in key_2_id.items():
             if sep:
                 print('{} {}'.format(key, value), file=fout)
@@ -86,16 +86,16 @@ def save_txt_dict(key_2_id, filename, sep=None, mode='w'):
                 print('{}{}{}'.format(key, sep, value), file=fout)
 
 
-def read_json_dict(filename, mode='r'):
-    with open(filename, mode, encoding='utf-8') as fin:
+def read_json_dict(filename, mode='r', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fin:
         key_2_id = json.load(fin)
         id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
 
 
-def save_json_dict(data, filename, mode='w'):
-    with open(filename, mode, encoding='utf-8') as fout:
+def save_json_dict(data, filename, mode='w', encoding='utf-8'):
+    with open(filename, mode, encoding=encoding) as fout:
         json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
@@ -183,7 +183,7 @@ def load_glove_embedding(data_file, word_list):
     with open(data_file, 'r', encoding='utf-8') as fin:
         line = fin.readline()
         embedding_size = len(line.strip().split()) - 1
-        while line:
+        while line and line != '':
             line = line.strip().split()
             if len(line) == embedding_size + 1:
                 word = line[0]
@@ -211,8 +211,9 @@ def train_tfidf(text_file, feature_size, model_file):
         ngram_range=(1, 2),
         token_pattern=r'(?u)\b\w+\b'
     ).fit(data)
-
     joblib.dump(tfidf, model_file)
+
+    return tfidf
 
 
 def load_tfidf(model_file):
