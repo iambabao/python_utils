@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """
-@Author     : Bao
-@Date       : 2020/2/20 14:04
-@Desc       :
+@Author             : Bao
+@Date               : 2020/1/1 00:00
+@Desc               :
+@Last modified by   : Bao
+@Last modified date : 2020/4/5 19:37
 """
 
-from nltk.translate.bleu_score import corpus_bleu, SmoothingFunction
+from nltk.translate.bleu_score import corpus_bleu
 
 from utils import read_json_lines
 
@@ -32,15 +34,16 @@ class Evaluator:
 
         assert len(list_of_references) == len(hypotheses)
 
-        bleu1 = 100 * corpus_bleu(list_of_references, hypotheses, (1., 0., 0., 0.), SmoothingFunction().method4)
-        bleu2 = 100 * corpus_bleu(list_of_references, hypotheses, (0.5, 0.5, 0., 0.), SmoothingFunction().method4)
-        bleu3 = 100 * corpus_bleu(list_of_references, hypotheses, (0.33, 0.33, 0.33, 0.), SmoothingFunction().method4)
-        bleu4 = 100 * corpus_bleu(list_of_references, hypotheses, (0.25, 0.25, 0.25, 0.25), SmoothingFunction().method4)
-        print('{:>.4f}, {:>.4f}, {:>.4f}, {:>.4f}'.format(bleu1, bleu2, bleu3, bleu4))
-        res = {
+        bleu1 = corpus_bleu(list_of_references, hypotheses, (1., 0., 0., 0.))
+        bleu2 = corpus_bleu(list_of_references, hypotheses, (0.5, 0.5, 0., 0.))
+        bleu3 = corpus_bleu(list_of_references, hypotheses, (0.33, 0.33, 0.33, 0.))
+        bleu4 = corpus_bleu(list_of_references, hypotheses, (0.25, 0.25, 0.25, 0.25))
+        result = {
             'Bleu_1': bleu1,
             'Bleu_2': bleu2,
             'Bleu_3': bleu3,
             'Bleu_4': bleu4,
         }
-        return res
+        for k, v in result.items():
+            print('{}: {}'.format(k, v))
+        return result
