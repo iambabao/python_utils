@@ -5,7 +5,7 @@
 @Date               : 2020/1/1 00:00
 @Desc               :
 @Last modified by   : Bao
-@Last modified date : 2020/4/5 19:37
+@Last modified date : 2020/4/25 19:37
 """
 
 import os
@@ -22,8 +22,8 @@ from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def print_title(title, sep='=', file=None):
-    print(sep * 20 + '  {}  '.format(title) + sep * 20, file=file)
+def log_title(title, sep='='):
+    return sep * 20 + '  {}  '.format(title) + sep * 20
 
 
 def makedirs(dir):
@@ -31,15 +31,21 @@ def makedirs(dir):
         os.makedirs(dir)
 
 
-def read_file(filename, mode='r', encoding='utf-8'):
+def read_file(filename, mode='r', encoding='utf-8', skip=0):
     with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
+            if skip > 0:
+                skip -= 1
+                continue
             yield line
 
 
-def save_file(data, filename, mode='w', encoding='utf-8'):
+def save_file(data, filename, mode='w', encoding='utf-8', skip=0):
     with open(filename, mode, encoding=encoding) as fout:
         for line in data:
+            if skip > 0:
+                skip -= 1
+                continue
             print(line, file=fout)
 
 
@@ -53,35 +59,44 @@ def save_json(data, filename, mode='w', encoding='utf-8'):
         json.dump(data, fout, ensure_ascii=False, indent=4)
 
 
-def read_json_lines(filename, mode='r', encoding='utf-8'):
+def read_json_lines(filename, mode='r', encoding='utf-8', skip=0):
     with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
+            if skip > 0:
+                skip -= 1
+                continue
             yield json.loads(line)
 
 
-def save_json_lines(data, filename, mode='w', encoding='utf-8'):
+def save_json_lines(data, filename, mode='w', encoding='utf-8', skip=0):
     with open(filename, mode, encoding=encoding) as fout:
         for line in data:
+            if skip > 0:
+                skip -= 1
+                continue
             print(json.dumps(line, ensure_ascii=False), file=fout)
 
 
-def read_txt_dict(filename, sep=None, mode='r', encoding='utf-8'):
+def read_txt_dict(filename, sep=None, mode='r', encoding='utf-8', skip=0):
     key_2_id = dict()
     with open(filename, mode, encoding=encoding) as fin:
         for line in fin:
-            if sep:
-                _key, _id = line.strip().split(sep)
-            else:
-                _key, _id = line.strip().split()
-            key_2_id[_key] = _id
+            if skip > 0:
+                skip -= 1
+                continue
+            key, _id = line.strip().split(sep)
+            key_2_id[key] = _id
     id_2_key = dict(zip(key_2_id.values(), key_2_id.keys()))
 
     return key_2_id, id_2_key
 
 
-def save_txt_dict(key_2_id, filename, sep=None, mode='w', encoding='utf-8'):
+def save_txt_dict(key_2_id, filename, sep=None, mode='w', encoding='utf-8', skip=0):
     with open(filename, mode, encoding=encoding) as fout:
         for key, value in key_2_id.items():
+            if skip > 0:
+                skip -= 1
+                continue
             if sep:
                 print('{} {}'.format(key, value), file=fout)
             else:
@@ -220,16 +235,6 @@ def train_tfidf(text_file, feature_size, model_file):
 
 def load_tfidf(model_file):
     return joblib.load(model_file)
-
-
-def load_gidf(model_file):
-    gidf = {}
-    with open(model_file, 'r', encoding='utf-8') as fin:
-        for line in fin:
-            w, v = line.strip().split()
-            gidf[w] = float(v)
-
-    return gidf
 
 
 def cosine_similarity(v1, v2):

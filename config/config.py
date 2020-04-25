@@ -5,19 +5,20 @@
 @Date               : 2020/1/1 00:00
 @Desc               :
 @Last modified by   : Bao
-@Last modified date : 2020/4/5 19:37
+@Last modified date : 2020/4/25 19:37
 """
 
 import os
 
 
 class Config:
-    def __init__(self, root_dir, current_model, num_epoch=30, batch_size=32,
-                 top_k=5, threshold=0.4, sequence_len=128,
-                 tfidf_size=5000, word_em_size=200,
+    def __init__(self, root_dir, current_model,
+                 num_epoch=30, batch_size=32,
+                 top_k=5, threshold=0.4,
+                 sequence_len=128, word_em_size=200,
                  hidden_size=256, attention_size=256,
                  kernel_size=(2, 3, 4, 5), filter_dim=64,
-                 num_layer=4, num_head=8, model_dim=256,
+                 num_layers=4, num_heads=8, model_dim=256,
                  fc_size_s=128, fc_size_m=512, fc_size_l=1024,
                  optimizer='Adam', lr=0.001, dropout=0.1, l2_rate=0.0,
                  beam_search=False):
@@ -38,16 +39,15 @@ class Config:
         self.embedding_dir = os.path.join(self.data_dir, 'embedding')
         self.plain_text = os.path.join(self.embedding_dir, 'plain_text.txt')
         self.word2vec_model = os.path.join(self.embedding_dir, 'word2vec.model')
-        self.tfidf_model = os.path.join(self.embedding_dir, 'tfidf.model')
         self.glove_file = os.path.join(self.embedding_dir, 'glove.6B.300d.txt')
 
         self.current_model = current_model
-        self.result_dir = os.path.join(self.root_dir, 'result', self.current_model)
-        self.model_file = os.path.join(self.result_dir, 'model')
-        self.valid_result = os.path.join(self.result_dir, 'valid_result.json')
-        self.test_result = os.path.join(self.result_dir, 'test_result.json')
-        self.train_log_dir = os.path.join(self.result_dir, 'train_log')
-        self.valid_log_dir = os.path.join(self.result_dir, 'valid_log')
+        self.result_dir = os.path.join(self.root_dir, 'result')
+        self.model_file = os.path.join(self.result_dir, self.current_model, 'model')
+        self.valid_result = os.path.join(self.result_dir, self.current_model, 'valid_result.json')
+        self.test_result = os.path.join(self.result_dir, self.current_model, 'test_result.json')
+        self.train_log_dir = os.path.join(self.result_dir, self.current_model, 'train_log')
+        self.valid_log_dir = os.path.join(self.result_dir, self.current_model, 'valid_log')
 
         # BERT
         self.bert_dir = os.path.join(self.root_dir, 'chinese_L-12_H-768_A-12')
@@ -76,9 +76,8 @@ class Config:
 
         self.top_k = top_k
         self.threshold = threshold
-        self.tfidf_size = tfidf_size
-        self.word_em_size = word_em_size
         self.sequence_len = sequence_len
+        self.word_em_size = word_em_size
         self.beam_search = beam_search
 
         # RNN
@@ -90,8 +89,8 @@ class Config:
         self.filter_dim = filter_dim
 
         # Transformer
-        self.num_layer = num_layer
-        self.num_head = num_head
+        self.num_layers = num_layers
+        self.num_heads = num_heads
         self.model_dim = model_dim
 
         # FC
@@ -102,7 +101,7 @@ class Config:
         # Train
         self.num_epoch = num_epoch
         self.batch_size = batch_size
+        self.optimizer = optimizer
         self.lr = lr
         self.dropout = dropout
-        self.optimizer = optimizer
         self.l2_rate = l2_rate
