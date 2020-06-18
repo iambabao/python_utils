@@ -42,7 +42,7 @@ class Config:
         self.glove_file = os.path.join(self.embedding_dir, 'glove.6B.300d.txt')
 
         self.current_model = current_model
-        self.result_dir = os.path.join(self.root_dir, 'result')
+        self.result_dir = os.path.join(self.root_dir, 'results')
         self.model_file = os.path.join(self.result_dir, self.current_model, 'model')
         self.valid_outputs = os.path.join(self.result_dir, self.current_model, 'valid_outputs.json')
         self.valid_results = os.path.join(self.result_dir, self.current_model, 'valid_results.json')
