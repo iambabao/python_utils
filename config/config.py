@@ -5,7 +5,7 @@
 @Date               : 2020/1/1 00:00
 @Desc               :
 @Last modified by   : Bao
-@Last modified date : 2020/4/25 19:37
+@Last modified date : 2020/6/18 19:37
 """
 
 import os
@@ -13,9 +13,9 @@ import os
 
 class Config:
     def __init__(self, root_dir, current_model,
-                 num_epoch=30, batch_size=32,
-                 top_k=5, threshold=0.4,
-                 sequence_len=128, word_em_size=200,
+                 num_epoch=30, batch_size=32, top_k=5, threshold=0.4,
+                 max_num_seqs=20, max_seq_length=128,
+                 word_em_size=300, feature_em_size = 50,
                  hidden_size=256, attention_size=256,
                  kernel_size=(2, 3, 4, 5), filter_dim=64,
                  num_layers=4, num_heads=8, model_dim=256,
@@ -44,8 +44,10 @@ class Config:
         self.current_model = current_model
         self.result_dir = os.path.join(self.root_dir, 'result')
         self.model_file = os.path.join(self.result_dir, self.current_model, 'model')
-        self.valid_result = os.path.join(self.result_dir, self.current_model, 'valid_result.json')
-        self.test_result = os.path.join(self.result_dir, self.current_model, 'test_result.json')
+        self.valid_outputs = os.path.join(self.result_dir, self.current_model, 'valid_outputs.json')
+        self.valid_results = os.path.join(self.result_dir, self.current_model, 'valid_results.json')
+        self.test_outputs = os.path.join(self.result_dir, self.current_model, 'test_outputs.json')
+        self.test_results = os.path.join(self.result_dir, self.current_model, 'test_results.json')
         self.train_log_dir = os.path.join(self.result_dir, self.current_model, 'train_log')
         self.valid_log_dir = os.path.join(self.result_dir, self.current_model, 'valid_log')
 
@@ -72,12 +74,16 @@ class Config:
         self.vocab_size = 80000
         self.src_vocab_size = 40000
         self.tgt_vocab_size = 40000
+        self.word_2_id = {}
+        self.id_2_word = {}
         self.to_lower = True
 
         self.top_k = top_k
         self.threshold = threshold
-        self.sequence_len = sequence_len
+        self.max_num_seqs = max_num_seqs
+        self.max_seq_length = max_seq_length
         self.word_em_size = word_em_size
+        self.feature_em_size = feature_em_size
         self.beam_search = beam_search
 
         # RNN

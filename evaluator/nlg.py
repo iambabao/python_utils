@@ -8,11 +8,15 @@
 @Last modified date : 2020/4/5 19:37
 """
 
+import logging
+
 from .pycocoevalcap.bleu.bleu import Bleu
 from .pycocoevalcap.meteor.meteor import Meteor
 from .pycocoevalcap.rouge.rouge import Rouge
 from .pycocoevalcap.cider.cider import Cider
 from utils import read_json_lines
+
+logger = logging.getLogger(__name__)
 
 
 class Evaluator:
@@ -49,10 +53,10 @@ class Evaluator:
             score, scores = scorer.compute_score(refs, hyps)
             if isinstance(method, list):
                 for sc, scs, m in zip(score, scores, method):
-                    print("%s: %0.6f" % (m, sc))
+                    logger.info("%s: %0.6f" % (m, sc))
                     res[m] = sc
             else:
-                print("%s: %0.6f" % (method, score))
+                logger.info("%s: %0.6f" % (method, score))
                 res[method] = score
 
         return res

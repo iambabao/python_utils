@@ -5,30 +5,39 @@
 @Date               : 2020/1/1 00:00
 @Desc               :
 @Last modified by   : Bao
-@Last modified date : 2020/4/25 19:37
+@Last modified date : 2020/6/18 19:37
 """
 
-import os
 import json
-import numpy as np
 import math
 import random
+import logging
 import jieba
 import nltk
 import joblib
+import numpy as np
 import tensorflow as tf
 from jieba import posseg as pseg
 from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
-def log_title(title, sep='='):
-    return sep * 20 + '  {}  '.format(title) + sep * 20
+logger = logging.getLogger(__name__)
 
 
-def makedirs(dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+def make_title(title, sep='='):
+    return sep * 50 + ' {} '.format(title) + sep * 50
+
+
+def init_logger(level, filename=None, mode='a', encoding='utf-8'):
+    logging_config = {
+        'format': '%(asctime)s - %(levelname)s - %(name)s:\t%(message)s',
+        'datefmt': '%Y-%m-%d %H:%M:%S',
+        'level': level,
+        'handlers': [logging.StreamHandler()]
+    }
+    if filename:
+        logging_config['handlers'].append(logging.FileHandler(filename, mode, encoding))
+    logging.basicConfig(**logging_config)
 
 
 def read_file(filename, mode='r', encoding='utf-8', skip=0):
@@ -158,14 +167,13 @@ def pos_text_zh(text):
     return pseg.lcut(text)
 
 
-def make_batch_iter(data, batch_size, shuffle, verbose=True):
+def make_batch_iter(data, batch_size, shuffle):
     data_size = len(data)
     num_batches = (data_size + batch_size - 1) // batch_size
+    logger.info('total batches: {}'.format(num_batches))
 
     if shuffle:
         random.shuffle(data)
-    if verbose:
-        print('total batches: {}'.format(num_batches))
     for i in range(num_batches):
         start_index = i * batch_size
         end_index = min(data_size, (i + 1) * batch_size)
@@ -208,7 +216,7 @@ def load_glove_embedding(data_file, word_list):
                 if word in word_list:
                     w2v[word] = vector
             line = fin.readline()
-    print('hit words: {}'.format(len(w2v)))
+    logger.info('hit words: {}'.format(len(w2v)))
 
     embedding_matrix = []
     for word in word_list:
@@ -249,10 +257,7 @@ def cosine_similarity(v1, v2):
 
 
 def view_tf_check_point(ckpt_dir_or_file):
-    init_vars = tf.train.list_variables(ckpt_dir_or_file)
-
-    for v in init_vars:
-        print(v)
+    return tf.train.list_variables(ckpt_dir_or_file)
 
 
 # ====================
