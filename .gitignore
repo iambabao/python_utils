@@ -1,10 +1,10 @@
-.idea/
-.vscode/
-/**/data/
-/**/outputs/
-/**/results/
-/**/checkpoints/
-/**/temp/
+.idea/*
+.vscode/*
+/**/data/*
+/**/outputs/*
+/**/results/*
+/**/checkpoints/*
+/**/temp/*
 .DS_Store
 temp.*
 *.temp.*
