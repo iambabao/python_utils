@@ -24,10 +24,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 logger = logging.getLogger(__name__)
 
 
-def make_title(title, sep='='):
-    return sep * 50 + ' {} '.format(title) + sep * 50
-
-
 def init_logger(level, filename=None, mode='a', encoding='utf-8'):
     logging_config = {
         'format': '%(asctime)s - %(levelname)s - %(name)s:\t%(message)s',
@@ -38,6 +34,10 @@ def init_logger(level, filename=None, mode='a', encoding='utf-8'):
     if filename:
         logging_config['handlers'].append(logging.FileHandler(filename, mode, encoding))
     logging.basicConfig(**logging_config)
+
+
+def log_title(title, sep='='):
+    return sep * 50 + '  {}  '.format(title) + sep * 50
 
 
 def read_file(filename, mode='r', encoding='utf-8', skip=0):
